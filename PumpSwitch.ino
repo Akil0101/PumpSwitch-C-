@@ -59,6 +59,7 @@ void loop() {
   // ✅ Send POST only if changed
   if (R != lastR || Y != lastY || B != lastB) {
     sendPostRequest(R, Y, B);
+    digitalWrite(LED_PIN, LOW);
     lastR = R;
     lastY = Y;
     lastB = B;
@@ -94,11 +95,12 @@ void sendGetRequest() {
       int R = digitalRead(R_PIN);
       int Y = digitalRead(Y_PIN);
       int B = digitalRead(B_PIN);
-      if (R != 1 && Y != 1 && B != 1) {
+      if (R == HIGH && Y == HIGH && B == HIGH) {
         digitalWrite(LED_PIN, M ? HIGH : LOW);
         Serial.println(M ? "💡 LED ON" : "💡 LED OFF");
       } else {
-        if (LED_PIN == HIGH) {
+        if (R == LOW || Y == LOW || B == LOW) {
+
           digitalWrite(LED_PIN, LOW);
           Serial.println("⚠️ Electricity gone! Sending stopmotor GET...");
 
